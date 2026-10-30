@@ -1,0 +1,39 @@
+{
+  "town": {
+    "name": "Example City",
+    "disclaimer": "Example City is a fictional city made for this demo. All names, addresses and phone numbers are fake.",
+    "population": 48000,
+    "river": "Example River"
+  },
+  "alert_levels": {
+    "1": {"label": "Level 1", "action": "Stay informed. Check the weather."},
+    "2": {"label": "Level 2", "action": "Check your evacuation route and shelter."},
+    "3": {"label": "Level 3 - Elderly and others evacuate", "action": "Older people, people with disabilities, and families with infants: start evacuating now. Everyone else: get ready."},
+    "4": {"label": "Level 4 - Evacuate", "action": "Everyone in a hazard area: evacuate now to a shelter or a safe place."},
+    "5": {"label": "Level 5 - Emergency safety", "action": "Disaster is happening. Evacuating may already be dangerous. Move to the highest, safest room you can reach right now."}
+  },
+  "hotlines": [
+    {"id": "H1", "name": "City Disaster Response HQ", "phone": "000-0000-0001", "hours": "24h during alerts"},
+    {"id": "H2", "name": "Fire and Ambulance (fictional)", "phone": "000-0000-0119", "hours": "24h"},
+    {"id": "H3", "name": "Help line for older residents", "phone": "000-0000-0002", "hours": "24h during alerts"}
+  ],
+  "shelters": [
+    {"id": "S1", "name": "Central Gym", "address": "1-1 Central", "capacity": 800, "safe_for": ["flood", "earthquake"], "notes": "Use 2F and above in floods. Accessible entrance on the north side."},
+    {"id": "S2", "name": "Hill Elementary School", "address": "5-2 Hilltop", "capacity": 600, "safe_for": ["flood", "earthquake", "landslide"], "notes": "On high ground."},
+    {"id": "S3", "name": "Riverside Community Hall", "address": "2-8 Riverside", "capacity": 300, "safe_for": ["earthquake"], "notes": "NOT for floods: next to Example River."},
+    {"id": "S4", "name": "North Junior High School", "address": "7-4 North", "capacity": 700, "safe_for": ["flood", "earthquake"], "notes": "Pets allowed in the outdoor area."},
+    {"id": "S5", "name": "East Park Field", "address": "3-3 East", "capacity": 2000, "safe_for": ["earthquake"], "notes": "Open field. NOT for floods or landslides."},
+    {"id": "S6", "name": "Welfare Center", "address": "4-6 Central", "capacity": 120, "safe_for": ["flood", "earthquake"], "notes": "Priority for people who need care."}
+  ],
+  "water_points": [
+    {"id": "W1", "name": "City Hall parking lot", "address": "1-3 Central"},
+    {"id": "W2", "name": "Hill Elementary School gate", "address": "5-2 Hilltop"}
+  ],
+  "everyday_notices": [
+    {"id": "N1", "title": "Example City Summer Festival", "body": "Fireworks, food stalls and a parade on the riverbank."},
+    {"id": "N2", "title": "New garbage collection schedule", "body": "Plastic is collected on Wednesdays from next month."},
+    {"id": "N3", "title": "Library renovation", "body": "The central library is closed for two weeks."},
+    {"id": "N4", "title": "Tax payment reminder", "body": "Property tax is due at the end of the month."},
+    {"id": "N5", "title": "Mayor's message", "body": "Thank you for making Example City a great place to live."}
+  ]
+}

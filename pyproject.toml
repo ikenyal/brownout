@@ -8,3 +8,8 @@ dependencies = [
     "strands-agents>=1.63.0",
     "strands-agents-tools>=0.8.11",
 ]
+
+[dependency-groups]
+dev = [
+    "pillow>=13.0.0",
+]

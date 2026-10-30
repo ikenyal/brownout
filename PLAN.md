@@ -14,7 +14,7 @@
 
 ## 題材（すべて自作。第三者のサイト・文章は使わない）
 
-- 架空の町「七色町（Nanairo Town, fictional）」の公式サイト
+- 架空の町「Example City（fictional）」の公式サイト。実在の地名と被らない名前にする（AWS の商標は動画規約上避ける）
 - 画像・動画はコードで自作。フォントは OFL ライセンスのもののみ使い、クレジットを併記
 - 警戒レベルの区分（1〜5）は日本の公的な枠組みに合わせる。気象庁データ連携はおまけ（利用条件の確認後）
 
@@ -68,3 +68,22 @@
 - リポジトリは ikenyal/brownout（Private で作成、提出直前に Public 化）。ライセンス Apache-2.0
 - AWS は brightflow-sandbox-ikeda（us-east-1）
 - 動画は @ikenyal、ナレーションは Amazon Polly
+
+## ワークショップ受講メモ（2026-10-31 修了、記事「学んだこと」の材料）
+
+教材と最新 SDK / CLI のずれ（strands-agents 1.63.0、新 agentcore CLI）:
+
+- Module 4: `context_manager="auto"` と `FileSessionManager` の併用が ValueError。
+  `SnapshotSessionManager` を使うか、`conversation_manager=SlidingWindowConversationManager(...)` に置き換えると動く
+- Module 5: `agentcore create` に Skip がない → type=code-based、template=`empty` で空プロジェクト
+- Module 5: `agentcore add` → agent ではなく `agentcore add runtime`（name / language / protocol=HTTP）
+- Module 5: `agentcore add runtime` は Python 3.14 で登録される。`uv init --bare --python 3.13` で作った pyproject に追従してデプロイ成功
+- Module 5: `agentcore invoke "..."` は不可。`agentcore invoke --runtime MyAgent --payload '{"prompt": "..."}'`
+  （`--prompt` は harness 専用）
+- Module 5: サンドボックス権限では CloudWatch Transaction Search の有効化がスキップされる（動作には影響なし）
+
+Brownout に効く知見:
+
+- Module 7 の結果「素朴なエージェント 0.70 vs Steering 付き 1.00」は、Brownout の
+  「機械的に剥がしただけのベースライン vs エージェント」比較の見せ方としてそのまま使える
+- Hooks（上限の強制）、決定的 Steering（検証が通るまで配信ツールを呼ばせない）、Evals（残存率の採点）を Brownout で使う

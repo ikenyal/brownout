@@ -263,12 +263,20 @@ dependencies = [
     { name = "strands-agents-tools" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pillow" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "bedrock-agentcore", specifier = ">=1.25.2" },
     { name = "strands-agents", specifier = ">=1.63.0" },
     { name = "strands-agents-tools", specifier = ">=0.8.11" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pillow", specifier = ">=13.0.0" }]
 
 [[package]]
 name = "certifi"

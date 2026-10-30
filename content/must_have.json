@@ -1,0 +1,32 @@
+{
+  "_about": "What each lite page MUST keep, per hazard and alert level. The Verifier checks generated pages against this. 'forbidden' items must not appear at all (e.g. a shelter that floods).",
+  "flood": {
+    "3": {
+      "required": ["action:3", "hotline:H1", "hotline:H3", "shelter:S1", "shelter:S2", "shelter:S4", "shelter:S6"],
+      "forbidden": ["shelter:S3", "shelter:S5"]
+    },
+    "4": {
+      "required": ["action:4", "hotline:H1", "hotline:H2", "shelter:S1", "shelter:S2", "shelter:S4", "shelter:S6"],
+      "forbidden": ["shelter:S3", "shelter:S5"]
+    },
+    "5": {
+      "required": ["action:5", "hotline:H1", "hotline:H2", "shelter:S2"],
+      "forbidden": ["shelter:S3", "shelter:S5"]
+    }
+  },
+  "earthquake": {
+    "3": {
+      "required": ["action:3", "hotline:H1", "hotline:H3", "shelter:S1", "shelter:S2", "shelter:S3", "shelter:S4", "shelter:S5", "shelter:S6", "water:W1", "water:W2"],
+      "forbidden": []
+    },
+    "4": {
+      "required": ["action:4", "hotline:H1", "hotline:H2", "shelter:S1", "shelter:S2", "shelter:S3", "shelter:S4", "shelter:S5", "shelter:S6", "water:W1", "water:W2"],
+      "forbidden": []
+    },
+    "5": {
+      "required": ["action:5", "hotline:H1", "hotline:H2", "shelter:S5", "water:W1"],
+      "forbidden": []
+    }
+  },
+  "budgets_bytes_gzip": {"3": 500000, "4": 50000, "5": 14000}
+}
