@@ -1,0 +1,18 @@
+Title:
+Brownout: a city website that gets lighter as a disaster gets worse (Strands SDK: Workshop to Ship)
+
+Description:
+When a flood warning goes out, everyone opens the same city website on the same congested network. Example City's homepage weighs 28 MB and does not finish loading in 3 minutes on congested 3G.
+
+Brownout is an AI agent built with the Strands Agents SDK. As the alert level rises, it rewrites the site into a page of under 1 KB, checks it against the city's own data, and switches the live site at the CloudFront edge.
+
+- A Curator agent decides which facts matter; a Writer agent writes the page from the city data only
+- PublishGuard (a Strands hook) blocks publishing until the page fits the byte budget, keeps every required fact, shows no unsafe shelter, invents no number or place, and passes a Verifier agent
+- One write to CloudFront KeyValueStore switches the whole site: no deployment, no cache invalidation
+- Results: 18 of 18 runs correct with the guard, 13 of 18 without it, 0 of 6 by stripping media
+
+Example City is fictional; all names, addresses and phone numbers are made up.
+Built for the AWS Builder Center hackathon "Strands SDK: Workshop to Ship" (Climate resilience).
+Built with Strands Agents SDK, Amazon Bedrock AgentCore, Amazon Nova, Amazon CloudFront, Amazon S3, Amazon EventBridge and AWS Lambda. Narration voiced by Amazon Polly.
+Live demo: https://d3u5pnxb6mo4pr.cloudfront.net/
+Code: https://github.com/ikenyal/brownout

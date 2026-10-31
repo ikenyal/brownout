@@ -83,7 +83,7 @@ Raw results: `results/loadtest.json`.
 
 ### How fast does the live site switch? (`scripts/alert.py`)
 
-From sending the event to the live CloudFront URL showing the new page: 24 to 55 seconds over four runs. The agent itself takes about 5.5 s; Lambda including a new AgentCore Runtime session 11 to 13 s; the rest is KeyValueStore propagation to the edge. Raw results: `results/switch-times.json`.
+From sending the event to the live CloudFront URL showing the new page: 27 to 47 seconds over four runs. The agent itself (including the Verifier) takes about 7 to 8 s; Lambda including a new AgentCore Runtime session about 12 to 13 s; the rest is KeyValueStore propagation to the edge. Raw results: `results/switch-times.json`.
 
 ## Limits
 
