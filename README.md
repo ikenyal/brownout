@@ -106,7 +106,7 @@ From sending the event to the live CloudFront URL showing the new page: 27 to 47
 | `brownout/edge.py` | Publish to S3, flip the level in CloudFront KeyValueStore |
 | `runtime/main.py` | AgentCore Runtime entrypoint |
 | `infra/` | CloudFront Function router, edge and trigger setup scripts |
-| `scripts/` | Site generator, measurement, evaluation, load test, alert simulator |
+| `scripts/` | Site generator, measurement, evaluation, load test, alert simulator, screenshots and demo video pipeline |
 
 ## Run it
 
