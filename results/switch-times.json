@@ -1,0 +1,10 @@
+{
+  "measured": "2026-10-31, us-east-1, scripts/alert.py polling the live CloudFront URL every 2 s",
+  "runs": [
+    {"to": "flood level 3", "live_after_s": 55.3, "agent_s": 5.5, "lambda_ms": 13056},
+    {"to": "flood level 4", "live_after_s": 28.6, "agent_s": 5.7, "lambda_ms": 11222},
+    {"to": "flood level 5", "live_after_s": 37.2, "agent_s": 5.5, "lambda_ms": 11392},
+    {"to": "level 1 (full site)", "live_after_s": 24.0, "agent_s": 0.2, "lambda_ms": 5727}
+  ],
+  "notes": "agent_s = writing + checking + publishing inside AgentCore Runtime. lambda_ms includes starting a new runtime session. The remaining time is CloudFront KeyValueStore propagating the new level to edge locations, plus polling. The very first run after creating the trigger failed with AccessDeniedException (new IAM policy not yet propagated) and succeeded on Lambda's automatic retry."
+}

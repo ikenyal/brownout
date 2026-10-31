@@ -73,7 +73,7 @@ Speed, measured in Chrome with network emulation and the cache disabled:
 
 Brownout pages were between about 740 and 920 bytes gzipped, around 30,000 times smaller than the full homepage.
 
-On AWS, from the moment the event arrives, the agent needs about 6 seconds to write and verify a page, and the whole path through EventBridge, Lambda and AgentCore Runtime took about 15 seconds in my measurements.
+On AWS, the agent needs about 5.5 seconds to write, verify and publish a page. Including starting a new AgentCore Runtime session, the Lambda adapter finished in 11 to 13 seconds. In four measured switches, the live site showed the new page 24 to 55 seconds after the event was sent; most of the rest is CloudFront KeyValueStore propagating the new level to edge locations. That is slower than I first expected, and still a small fraction of the time the full site needs to load on a bad connection.
 
 ## What I learned
 

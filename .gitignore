@@ -22,3 +22,4 @@ deploy/brownoutrt/agentcore/agentcore.json
 infra/runtime-policy.json
 deploy/brownoutrt/agentcore/.cli/
 loadtest.log
+switch.log
