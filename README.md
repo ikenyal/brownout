@@ -39,7 +39,7 @@ Brownout follows Japan's five-level evacuation alert system. At each level it pu
 2. A thin AWS Lambda adapter invokes the Brownout agent on **Amazon Bedrock AgentCore Runtime**.
 3. The **Curator** agent (a specialist called as a tool) decides which facts matter for this hazard and level, for example which shelters are safe in a flood.
 4. The **Writer** agent writes one self-contained HTML page from the official city data only, and calls `publish_page`.
-5. **PublishGuard**, a Strands hook, blocks `publish_page` unless the page fits the byte budget, contains every required fact, and contains no unsafe shelter. The model cannot talk its way past it. Refusals go back to the agent as concrete feedback.
+5. **PublishGuard**, a Strands hook, blocks `publish_page` unless the page passes two layers of checks. Deterministic code: the byte budget, every required fact present, no unsafe shelter, and no phone number, address or place name that is not in the city data. Then a **Verifier** agent lists any sentence the city data does not support (for example general safety tips the agent added on its own); a word-overlap check drops flags that are just paraphrases. Refusals go back to the agent as concrete feedback, up to six attempts.
 6. Only a page that passed is written to Amazon S3, and only then is the alert level written to **CloudFront KeyValueStore**.
 7. A **CloudFront Function** reads that value on every request and routes all URLs to the page for the current level. No deployment and no cache invalidation are needed to switch.
 
@@ -48,7 +48,7 @@ flowchart LR
   EB[EventBridge<br/>AlertLevelChanged] --> L[Lambda adapter]
   L --> RT[AgentCore Runtime<br/>Brownout agent]
   RT --> C[Curator agent]
-  RT -->|publish_page| G{PublishGuard hook<br/>budget + required facts}
+  RT -->|publish_page| G{PublishGuard hook<br/>code checks + Verifier agent}
   G -->|refused + feedback| RT
   G -->|passed| S3[(S3)]
   RT -->|level| KVS[(CloudFront<br/>KeyValueStore)]
@@ -60,15 +60,15 @@ flowchart LR
 
 ### Is the page right? (`scripts/evaluate.py`)
 
-Six scenarios (flood and earthquake, levels 3 to 5). Each agent variant ran 3 times per scenario. A page passes only if it fits the budget, keeps every required fact and shows no unsafe shelter.
+Six scenarios (flood and earthquake, levels 3 to 5). Each agent variant ran 3 times per scenario. A page passes only if it fits the budget, keeps every required fact, shows no unsafe shelter, contains no phone number, address or place that is not in the city data, and contains no sentence the judge finds unsupported by the data.
 
-| Variant | Pass rate | Required facts kept | Pages with an unsafe shelter | Avg size (gzip) |
-|---|---|---|---|---|
-| Mechanical stripping | 0% | 75% | 3 of 6 | 1,270 B |
-| Agent without PublishGuard | 72% (2 of 18 runs published nothing) | 97% | 2 of 16 | 877 B |
-| **Brownout** (agent + PublishGuard) | **100%** | **100%** | **0 of 18** | **844 B** |
+| Variant | Pass rate | Required facts kept | Unsafe shelter shown | Unsupported sentences | Size (gzip) |
+|---|---|---|---|---|---|
+| Mechanical stripping | 0 of 6 | 75% | 3 of 6 | 6 of 6 | 1,266 B |
+| Agent without PublishGuard | 13 of 18 (72%) | 96% | 0 of 18 | 5 of 18 | 515-940 B |
+| **Brownout** (agent + PublishGuard) | **18 of 18 (100%)** | **100%** | **0 of 18** | **0 of 18** | 616-970 B |
 
-Model: Amazon Nova 2 Lite on Amazon Bedrock. Raw results: `results/eval-nova2lite-3trials.json`.
+Brownout published on the first try in 15 of 18 runs. Model: Amazon Nova 2 Lite on Amazon Bedrock. The judge for unsupported sentences is the same model and prompt as the Verifier inside PublishGuard, applied to every variant's final page; see Limits. Raw results: `results/eval-nova2lite-3trials.json`.
 
 ### Is the page fast? (`scripts/loadtest.py`)
 
@@ -84,6 +84,13 @@ Raw results: `results/loadtest.json`.
 ### How fast does the live site switch? (`scripts/alert.py`)
 
 From sending the event to the live CloudFront URL showing the new page: 24 to 55 seconds over four runs. The agent itself takes about 5.5 s; Lambda including a new AgentCore Runtime session 11 to 13 s; the rest is KeyValueStore propagation to the edge. Raw results: `results/switch-times.json`.
+
+## Limits
+
+- Example City, its data and its alerts are simulated. The required-facts checklist is written by hand per hazard and level.
+- The Verifier and the evaluation judge use the same model and prompt, so the "unsupported sentences" column shows what the other variants publish without that check, not an independent audit of Brownout. Required facts, unsafe shelters and invented numbers or places are checked by plain code.
+- Load times were measured locally with Chrome network emulation, not on a real disaster network.
+- Brownout replaces the whole site with one page per level; a real city site would need the same treatment for more pages.
 
 ## Repository layout
 

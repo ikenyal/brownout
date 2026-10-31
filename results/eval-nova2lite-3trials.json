@@ -5,7 +5,7 @@
     "level": 3,
     "published": true,
     "passed": false,
-    "bytes_gzip": 1270,
+    "bytes_gzip": 1266,
     "budget": 500000,
     "retention": 0.857,
     "missing": [
@@ -15,6 +15,10 @@
       "shelter:S3",
       "shelter:S5"
     ],
+    "invented": [],
+    "unsupported": [
+      "Have a nice day in Example City!"
+    ],
     "attempts": 0,
     "seconds": 0
   },
@@ -24,13 +28,15 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 917,
+    "bytes_gzip": 940,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 8.1
+    "seconds": 7.5
   },
   {
     "variant": "unguarded",
@@ -38,13 +44,15 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 950,
+    "bytes_gzip": 808,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 8.3
+    "seconds": 7.0
   },
   {
     "variant": "unguarded",
@@ -52,13 +60,15 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 1053,
+    "bytes_gzip": 819,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 8.3
+    "seconds": 9.3
   },
   {
     "variant": "brownout",
@@ -66,13 +76,15 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 790,
+    "bytes_gzip": 784,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.8
+    "seconds": 10.1
   },
   {
     "variant": "brownout",
@@ -80,13 +92,15 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 800,
+    "bytes_gzip": 757,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.7
+    "seconds": 7.3
   },
   {
     "variant": "brownout",
@@ -94,13 +108,15 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 922,
+    "bytes_gzip": 970,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 8.1
+    "seconds": 9.7
   },
   {
     "variant": "baseline",
@@ -108,7 +124,7 @@
     "level": 4,
     "published": true,
     "passed": false,
-    "bytes_gzip": 1270,
+    "bytes_gzip": 1266,
     "budget": 50000,
     "retention": 0.857,
     "missing": [
@@ -118,6 +134,10 @@
       "shelter:S3",
       "shelter:S5"
     ],
+    "invented": [],
+    "unsupported": [
+      "No alerts at the moment. Have a nice day in Example City!"
+    ],
     "attempts": 0,
     "seconds": 0
   },
@@ -127,11 +147,29 @@
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 752,
+    "bytes_gzip": 749,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 6.6
+  },
+  {
+    "variant": "unguarded",
+    "hazard": "flood",
+    "level": 4,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 818,
+    "budget": 50000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
     "seconds": 7.0
   },
@@ -141,27 +179,15 @@
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 844,
+    "bytes_gzip": 714,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.4
-  },
-  {
-    "variant": "unguarded",
-    "hazard": "flood",
-    "level": 4,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 1009,
-    "budget": 50000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
-    "attempts": 1,
-    "seconds": 8.5
+    "seconds": 6.6
   },
   {
     "variant": "brownout",
@@ -169,13 +195,15 @@
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 842,
+    "bytes_gzip": 673,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.5
+    "seconds": 7.0
   },
   {
     "variant": "brownout",
@@ -183,13 +211,15 @@
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 912,
+    "bytes_gzip": 762,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 8.3
+    "seconds": 8.0
   },
   {
     "variant": "brownout",
@@ -197,13 +227,15 @@
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 898,
+    "bytes_gzip": 718,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.9
+    "seconds": 7.1
   },
   {
     "variant": "baseline",
@@ -211,7 +243,7 @@
     "level": 5,
     "published": true,
     "passed": false,
-    "bytes_gzip": 1270,
+    "bytes_gzip": 1266,
     "budget": 14000,
     "retention": 0.75,
     "missing": [
@@ -220,6 +252,10 @@
     "forbidden": [
       "shelter:S3",
       "shelter:S5"
+    ],
+    "invented": [],
+    "unsupported": [
+      "No alerts at the moment. Have a nice day in Example City!"
     ],
     "attempts": 0,
     "seconds": 0
@@ -229,50 +265,70 @@
     "hazard": "flood",
     "level": 5,
     "published": true,
-    "passed": false,
-    "bytes_gzip": 891,
+    "passed": true,
+    "bytes_gzip": 737,
     "budget": 14000,
-    "retention": 0.75,
-    "missing": [
-      "action:5"
-    ],
-    "forbidden": [
-      "shelter:S3",
-      "shelter:S5"
-    ],
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.1
+    "seconds": 6.7
   },
   {
     "variant": "unguarded",
     "hazard": "flood",
     "level": 5,
     "published": true,
-    "passed": true,
-    "bytes_gzip": 742,
+    "passed": false,
+    "bytes_gzip": 703,
     "budget": 14000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "Do not attempt to evacuate; it may be too dangerous.",
+      "Do not travel unless you are already near one."
+    ],
+    "attempts": 1,
+    "seconds": 6.5
+  },
+  {
+    "variant": "unguarded",
+    "hazard": "flood",
+    "level": 5,
+    "published": true,
+    "passed": false,
+    "bytes_gzip": 796,
+    "budget": 14000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "Your life may depend on reaching high ground now.",
+      "Use the hotlines only for life-threatening situations."
+    ],
     "attempts": 1,
     "seconds": 6.8
   },
   {
-    "variant": "unguarded",
+    "variant": "brownout",
     "hazard": "flood",
     "level": 5,
     "published": true,
-    "passed": false,
-    "bytes_gzip": 881,
+    "passed": true,
+    "bytes_gzip": 842,
     "budget": 14000,
     "retention": 1.0,
     "missing": [],
-    "forbidden": [
-      "shelter:S3",
-      "shelter:S5"
-    ],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.0
+    "seconds": 7.7
   },
   {
     "variant": "brownout",
@@ -280,41 +336,31 @@
     "level": 5,
     "published": true,
     "passed": true,
-    "bytes_gzip": 809,
+    "bytes_gzip": 657,
     "budget": 14000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 6.6
+  },
+  {
+    "variant": "brownout",
+    "hazard": "flood",
+    "level": 5,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 752,
+    "budget": 14000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
     "seconds": 7.5
-  },
-  {
-    "variant": "brownout",
-    "hazard": "flood",
-    "level": 5,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 855,
-    "budget": 14000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
-    "attempts": 2,
-    "seconds": 9.2
-  },
-  {
-    "variant": "brownout",
-    "hazard": "flood",
-    "level": 5,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 912,
-    "budget": 14000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
-    "attempts": 1,
-    "seconds": 7.6
   },
   {
     "variant": "baseline",
@@ -322,7 +368,7 @@
     "level": 3,
     "published": true,
     "passed": false,
-    "bytes_gzip": 1270,
+    "bytes_gzip": 1266,
     "budget": 500000,
     "retention": 0.727,
     "missing": [
@@ -331,6 +377,10 @@
       "water:W2"
     ],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "No alerts at the moment. Have a nice day in Example City!"
+    ],
     "attempts": 0,
     "seconds": 0
   },
@@ -338,10 +388,17 @@
     "variant": "unguarded",
     "hazard": "earthquake",
     "level": 3,
-    "published": false,
-    "passed": false,
-    "attempts": 0,
-    "seconds": 6.8
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 745,
+    "budget": 500000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 6.9
   },
   {
     "variant": "unguarded",
@@ -349,50 +406,63 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 936,
+    "bytes_gzip": 759,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 7.5
+  },
+  {
+    "variant": "unguarded",
+    "hazard": "earthquake",
+    "level": 3,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 839,
+    "budget": 500000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 7.7
+  },
+  {
+    "variant": "brownout",
+    "hazard": "earthquake",
+    "level": 3,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 781,
+    "budget": 500000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
     "seconds": 7.6
   },
   {
-    "variant": "unguarded",
-    "hazard": "earthquake",
-    "level": 3,
-    "published": false,
-    "passed": false,
-    "attempts": 0,
-    "seconds": 6.4
-  },
-  {
     "variant": "brownout",
     "hazard": "earthquake",
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 794,
+    "bytes_gzip": 779,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
-    "attempts": 2,
-    "seconds": 9.5
-  },
-  {
-    "variant": "brownout",
-    "hazard": "earthquake",
-    "level": 3,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 900,
-    "budget": 500000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.4
+    "seconds": 7.8
   },
   {
     "variant": "brownout",
@@ -400,13 +470,15 @@
     "level": 3,
     "published": true,
     "passed": true,
-    "bytes_gzip": 857,
+    "bytes_gzip": 706,
     "budget": 500000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
-    "attempts": 2,
-    "seconds": 9.6
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 6.8
   },
   {
     "variant": "baseline",
@@ -414,7 +486,7 @@
     "level": 4,
     "published": true,
     "passed": false,
-    "bytes_gzip": 1270,
+    "bytes_gzip": 1266,
     "budget": 50000,
     "retention": 0.727,
     "missing": [
@@ -423,6 +495,10 @@
       "water:W2"
     ],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "No alerts at the moment. Have a nice day in Example City!"
+    ],
     "attempts": 0,
     "seconds": 0
   },
@@ -432,83 +508,95 @@
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 825,
+    "bytes_gzip": 724,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 6.7
+  },
+  {
+    "variant": "unguarded",
+    "hazard": "earthquake",
+    "level": 4,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 731,
+    "budget": 50000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 6.5
+  },
+  {
+    "variant": "unguarded",
+    "hazard": "earthquake",
+    "level": 4,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 711,
+    "budget": 50000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
     "seconds": 6.8
   },
   {
-    "variant": "unguarded",
+    "variant": "brownout",
     "hazard": "earthquake",
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 816,
+    "bytes_gzip": 698,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
-    "seconds": 7.1
+    "seconds": 7.3
   },
   {
-    "variant": "unguarded",
+    "variant": "brownout",
     "hazard": "earthquake",
     "level": 4,
     "published": true,
     "passed": true,
-    "bytes_gzip": 1056,
+    "bytes_gzip": 730,
     "budget": 50000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 1,
+    "seconds": 7.5
+  },
+  {
+    "variant": "brownout",
+    "hazard": "earthquake",
+    "level": 4,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 806,
+    "budget": 50000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 1,
     "seconds": 8.4
-  },
-  {
-    "variant": "brownout",
-    "hazard": "earthquake",
-    "level": 4,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 859,
-    "budget": 50000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
-    "attempts": 1,
-    "seconds": 7.2
-  },
-  {
-    "variant": "brownout",
-    "hazard": "earthquake",
-    "level": 4,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 914,
-    "budget": 50000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
-    "attempts": 1,
-    "seconds": 7.4
-  },
-  {
-    "variant": "brownout",
-    "hazard": "earthquake",
-    "level": 4,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 744,
-    "budget": 50000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
-    "attempts": 1,
-    "seconds": 6.8
   },
   {
     "variant": "baseline",
@@ -516,7 +604,7 @@
     "level": 5,
     "published": true,
     "passed": false,
-    "bytes_gzip": 1270,
+    "bytes_gzip": 1266,
     "budget": 14000,
     "retention": 0.6,
     "missing": [
@@ -524,6 +612,10 @@
       "water:W1"
     ],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "Have a nice day in Example City!"
+    ],
     "attempts": 0,
     "seconds": 0
   },
@@ -532,14 +624,21 @@
     "hazard": "earthquake",
     "level": 5,
     "published": true,
-    "passed": true,
-    "bytes_gzip": 767,
+    "passed": false,
+    "bytes_gzip": 727,
     "budget": 14000,
-    "retention": 1.0,
-    "missing": [],
+    "retention": 0.8,
+    "missing": [
+      "water:W1"
+    ],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "Stay where you are until shaking stops and you get an all-clear.",
+      "Do not go outside or attempt to travel."
+    ],
     "attempts": 1,
-    "seconds": 7.2
+    "seconds": 12.5
   },
   {
     "variant": "unguarded",
@@ -547,29 +646,40 @@
     "level": 5,
     "published": true,
     "passed": false,
-    "bytes_gzip": 778,
+    "bytes_gzip": 729,
     "budget": 14000,
     "retention": 0.8,
     "missing": [
       "water:W1"
     ],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "Do not attempt to evacuate now \u2013 it may be dangerous."
+    ],
     "attempts": 1,
-    "seconds": 6.7
+    "seconds": 6.6
   },
   {
     "variant": "unguarded",
     "hazard": "earthquake",
     "level": 5,
     "published": true,
-    "passed": true,
-    "bytes_gzip": 813,
+    "passed": false,
+    "bytes_gzip": 515,
     "budget": 14000,
-    "retention": 1.0,
-    "missing": [],
+    "retention": 0.6,
+    "missing": [
+      "shelter:S5",
+      "water:W1"
+    ],
     "forbidden": [],
+    "invented": [],
+    "unsupported": [
+      "Do not go to any shelter now."
+    ],
     "attempts": 1,
-    "seconds": 7.4
+    "seconds": 6.1
   },
   {
     "variant": "brownout",
@@ -577,27 +687,15 @@
     "level": 5,
     "published": true,
     "passed": true,
-    "bytes_gzip": 861,
+    "bytes_gzip": 659,
     "budget": 14000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
-    "attempts": 1,
-    "seconds": 7.5
-  },
-  {
-    "variant": "brownout",
-    "hazard": "earthquake",
-    "level": 5,
-    "published": true,
-    "passed": true,
-    "bytes_gzip": 782,
-    "budget": 14000,
-    "retention": 1.0,
-    "missing": [],
-    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
     "attempts": 2,
-    "seconds": 8.9
+    "seconds": 8.5
   },
   {
     "variant": "brownout",
@@ -605,12 +703,30 @@
     "level": 5,
     "published": true,
     "passed": true,
-    "bytes_gzip": 742,
+    "bytes_gzip": 616,
     "budget": 14000,
     "retention": 1.0,
     "missing": [],
     "forbidden": [],
-    "attempts": 2,
-    "seconds": 9.5
+    "invented": [],
+    "unsupported": [],
+    "attempts": 3,
+    "seconds": 10.8
+  },
+  {
+    "variant": "brownout",
+    "hazard": "earthquake",
+    "level": 5,
+    "published": true,
+    "passed": true,
+    "bytes_gzip": 674,
+    "budget": 14000,
+    "retention": 1.0,
+    "missing": [],
+    "forbidden": [],
+    "invented": [],
+    "unsupported": [],
+    "attempts": 3,
+    "seconds": 12.0
   }
 ]

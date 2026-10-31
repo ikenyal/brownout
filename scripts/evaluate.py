@@ -15,11 +15,15 @@ import json
 import time
 from pathlib import Path
 
-from brownout.agent import brownout, local_publisher
+from strands import Agent
+from strands.models import BedrockModel
+
+from brownout.agent import MODEL_ID, VERIFIER_PROMPT, brownout, local_publisher, unsupported_sentences
 from brownout.baseline import baseline_page
 from brownout.facts import HAZARDS, LEVELS, check
 
 OUT = Path("out/eval")
+JUDGE = Agent(model=BedrockModel(model_id=MODEL_ID, region_name="us-east-1"), system_prompt=VERIFIER_PROMPT, callback_handler=None)
 
 
 def row(variant: str, hazard: str, level: int, html: str | None, attempts: int, seconds: float) -> dict:
@@ -27,9 +31,10 @@ def row(variant: str, hazard: str, level: int, html: str | None, attempts: int, 
         return {"variant": variant, "hazard": hazard, "level": level, "published": False,
                 "passed": False, "attempts": attempts, "seconds": round(seconds, 1)}
     c = check(html, hazard, level)
+    c.unsupported = unsupported_sentences(JUDGE, html)  # same judge for every variant
     return {"variant": variant, "hazard": hazard, "level": level, "published": True, "passed": c.passed,
             "bytes_gzip": c.size, "budget": c.budget, "retention": round(c.retention, 3),
-            "missing": c.missing, "forbidden": c.forbidden, "attempts": attempts, "seconds": round(seconds, 1)}
+            "missing": c.missing, "forbidden": c.forbidden, "invented": c.invented, "unsupported": c.unsupported, "attempts": attempts, "seconds": round(seconds, 1)}
 
 
 def main() -> None:
@@ -52,16 +57,18 @@ def main() -> None:
 
 
 def summarize(rows: list[dict]) -> None:
-    print(f"\n{'variant':<10} {'runs':>5} {'pass':>6} {'retention':>10} {'forbidden':>10} {'avg bytes':>10} {'avg tries':>10}")
+    print(f"\n{'variant':<10} {'runs':>5} {'pass':>6} {'retention':>10} {'forbidden':>10} {'invented':>9} {'unsupported':>12} {'avg bytes':>10} {'avg tries':>10}")
     for v in ["baseline", "unguarded", "brownout"]:
         rs = [r for r in rows if r["variant"] == v]
         pub = [r for r in rs if r["published"]]
         pass_rate = sum(r["passed"] for r in rs) / len(rs)
         ret = sum(r["retention"] for r in pub) / len(pub) if pub else 0
         forb = sum(bool(r["forbidden"]) for r in pub)
+        inv = sum(bool(r["invented"]) for r in pub)
+        uns = sum(bool(r["unsupported"]) for r in pub)
         size = sum(r["bytes_gzip"] for r in pub) / len(pub) if pub else 0
         tries = sum(r["attempts"] for r in rs) / len(rs)
-        print(f"{v:<10} {len(rs):>5} {pass_rate:>6.0%} {ret:>10.0%} {forb:>10} {size:>10,.0f} {tries:>10.1f}")
+        print(f"{v:<10} {len(rs):>5} {pass_rate:>6.0%} {ret:>10.0%} {forb:>10} {inv:>9} {uns:>12} {size:>10,.0f} {tries:>10.1f}")
 
 
 if __name__ == "__main__":

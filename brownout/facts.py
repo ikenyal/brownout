@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -48,6 +49,8 @@ class Check:
     required_count: int = 0
     missing: list[str] = field(default_factory=list)
     forbidden: list[str] = field(default_factory=list)
+    invented: list[str] = field(default_factory=list)
+    unsupported: list[str] = field(default_factory=list)
 
     @property
     def over_budget(self) -> bool:
@@ -55,7 +58,7 @@ class Check:
 
     @property
     def passed(self) -> bool:
-        return not (self.over_budget or self.missing or self.forbidden)
+        return not (self.over_budget or self.missing or self.forbidden or self.invented or self.unsupported)
 
     @property
     def retention(self) -> float:
@@ -65,10 +68,30 @@ class Check:
 
 def check(html: str, hazard: str, level: int) -> Check:
     rule = MUST[hazard][str(level)]
+    html = re.sub(r"\s+", " ", html)  # a name split across lines is still the same name
     c = Check(size=gzip_size(html), budget=budget(level), required_count=len(rule["required"]))
     c.missing = [i for i in rule["required"] if token(i) not in html]
     c.forbidden = [i for i in rule["forbidden"] if token(i) in html]
+    c.invented = invented(html)
     return c
+
+
+KNOWN_PHONES = {h["phone"] for h in TOWN["hotlines"]}
+KNOWN_ADDRESSES = {x["address"] for x in TOWN["shelters"] + TOWN["water_points"]}
+KNOWN_PLACES = {x["name"] for x in TOWN["shelters"] + TOWN["water_points"]}
+PHONE = re.compile(r"\b\d{3}-\d{4}-\d{4}\b")
+ADDRESS = re.compile(r"\b\d+-\d+ [A-Z][a-z]+\b")
+PLACE = re.compile(r"\b(?:[A-Z][a-z]+ ){1,3}(?:Gym|School|Hall|Center|Centre|Field|Park|Station|Hospital|Shelter)\b")
+
+
+def invented(html: str) -> list[str]:
+    """Phone numbers, addresses and place names that are NOT in the city data."""
+    text = re.sub(r"<[^>]+>", " ", html)
+    found = [f"phone '{p}'" for p in set(PHONE.findall(html)) - KNOWN_PHONES]
+    found += [f"address '{a}'" for a in set(ADDRESS.findall(text)) - KNOWN_ADDRESSES]
+    places = {p for p in PLACE.findall(text) if not any(p in k or k in p for k in KNOWN_PLACES)}
+    found += [f"place '{p}'" for p in places]
+    return sorted(found)
 
 
 def describe(c: Check) -> str:
@@ -80,4 +103,8 @@ def describe(c: Check) -> str:
         parts.append(f"Missing required item {i}: the page must contain the exact text '{token(i)}'.")
     for i in c.forbidden:
         parts.append(f"Remove {i} ('{token(i)}'): it is NOT safe for this hazard and must not appear anywhere on the page.")
+    for i in c.invented:
+        parts.append(f"Remove the {i}: it is not in the city data. Never invent facts.")
+    for i in c.unsupported:
+        parts.append(f"Remove or rewrite this sentence, it is not supported by the city data: \"{i}\".")
     return " ".join(parts) or "OK"

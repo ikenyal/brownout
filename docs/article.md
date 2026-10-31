@@ -40,29 +40,29 @@ Brownout follows Japan's five-level evacuation alert system:
 2. A small AWS Lambda function passes the event to the Brownout agent on Amazon Bedrock AgentCore Runtime.
 3. The Writer agent reads the city data and asks the Curator agent, a specialist that the Writer calls as a tool, which facts matter for this hazard and level.
 4. The Writer writes one self-contained HTML page and calls `publish_page`.
-5. A Strands hook called PublishGuard intercepts that call. It measures the gzipped size, checks that every required fact is present and that no unsafe shelter appears. If anything is wrong, the call is cancelled and the agent receives exact feedback, such as "Remove Riverside Community Hall: it is not safe for this hazard". The agent fixes the page and tries again, up to four times.
+5. A Strands hook called PublishGuard intercepts that call and runs two layers of checks. First plain code: the gzipped size, every required fact present, no unsafe shelter, and no phone number, address or place name that does not exist in the city data. Then a third agent, the Verifier, reads the page next to the data and lists any sentence the data does not support. A small word-overlap check drops flags that are only paraphrases, so the Verifier rarely blocks an honest rewording. If anything is wrong, the call is cancelled and the agent receives exact feedback, such as "Remove Riverside Community Hall: it is not safe for this hazard". The agent fixes the page and tries again, up to six times.
 6. Only a page that passed is written to Amazon S3. Only after that does the agent write the new level into CloudFront KeyValueStore.
 7. A CloudFront Function runs on every request, reads the level from KeyValueStore and routes every URL to the page for that level. Because the function runs before the cache lookup, switching needs no deployment and no cache invalidation.
 
 ## Three design choices
 
-The agent never invents facts. Everything on an emergency page comes from the city data. The agent decides what to keep and how to say it, not what is true.
+The agent never invents facts. Everything on an emergency page comes from the city data. The agent decides what to keep and how to say it, not what is true. This turned out to be harder than it sounds. Early pages passed every code check and still ended with a friendly "Stay safe and avoid low-lying areas", or with "Drop, take cover and hold on" during an earthquake. Good advice, but not the city's advice, and not something the city has checked. That is why the Verifier exists.
 
-The rules that matter are code, not prompt. A model can be asked nicely to keep the hotline number and to skip the riverside hall. PublishGuard makes sure it did. This idea came straight from the workshop's modules on hooks and steering, where a deterministic handler blocks a refund until the right steps were followed.
+The rules that matter are code, not prompt. A model can be asked nicely to keep the hotline number and to skip the riverside hall. PublishGuard makes sure it did. This idea came straight from the workshop's modules on hooks and steering, where a deterministic handler blocks a refund until the right steps were followed, and an LLM-based handler reviews the tone. Brownout uses the same split: code for what can be checked exactly, a model only for what cannot.
 
 The edge never shows an unchecked page. If the agent gives up, the site stays on whatever was live before. Old but correct beats new but wrong.
 
 ## Results
 
-I compared three ways of producing the emergency page, on six scenarios (flood and earthquake, Levels 3 to 5). The two agent variants ran three times per scenario with Amazon Nova 2 Lite.
+I compared three ways of producing the emergency page, on six scenarios (flood and earthquake, Levels 3 to 5). The two agent variants ran three times per scenario with Amazon Nova 2 Lite. A page passes only if it fits the budget, keeps every required fact, shows no unsafe shelter, invents no number, address or place, and has no sentence the data does not support.
 
-| Variant | Pass rate | Required facts kept | Pages with an unsafe shelter |
-|---|---|---|---|
-| Strip images, video and scripts | 0% | 75% | 3 of 6 |
-| Agent without PublishGuard | 72% | 97% | 2 of 16 published |
-| Brownout | 100% | 100% | 0 of 18 |
+| Variant | Pass | Required facts kept | Unsafe shelter shown | Unsupported sentences |
+|---|---|---|---|---|
+| Strip images, video and scripts | 0 of 6 | 75% | 3 of 6 | 6 of 6 |
+| Agent without PublishGuard | 13 of 18 | 96% | 0 of 18 | 5 of 18 |
+| Brownout | 18 of 18 | 100% | 0 of 18 | 0 of 18 |
 
-Stripping is light, but it is not right. The stripped page still says "No alerts at the moment", mixes festival news with shelters, and lists the riverside hall during a flood. The agent alone is much better, but in about a quarter of the runs it either dropped a required fact, included an unsafe shelter, or never published. With PublishGuard every run produced a correct page, most of them on the first try.
+Stripping is light, but it is not right. The stripped page still says "No alerts at the moment. Have a nice day", mixes festival news with shelters, and lists the riverside hall during a flood. The agent alone is much better, but in five of eighteen runs it either dropped a required fact or added advice of its own. With PublishGuard every run produced a correct page, 15 of them on the first try.
 
 Speed, measured in Chrome with network emulation and the cache disabled:
 
@@ -71,7 +71,7 @@ Speed, measured in Chrome with network emulation and the cache disabled:
 | Congested 3G (400 kbit/s, 400 ms) | not fully loaded after 180 s | 0.5 s |
 | 2G (50 kbit/s, 500 ms) | not fully loaded after 180 s | 1.0 s |
 
-Brownout pages were between about 740 and 920 bytes gzipped, around 30,000 times smaller than the full homepage.
+Brownout pages were between about 620 and 970 bytes gzipped, around 30,000 times smaller than the full homepage.
 
 On AWS, the agent needs about 5.5 seconds to write, verify and publish a page. Including starting a new AgentCore Runtime session, the Lambda adapter finished in 11 to 13 seconds. In four measured switches, the live site showed the new page 24 to 55 seconds after the event was sent; most of the rest is CloudFront KeyValueStore propagating the new level to edge locations. That is slower than I first expected, and still a small fraction of the time the full site needs to load on a bad connection.
 
@@ -81,11 +81,11 @@ The workshop's patterns transfer almost one to one. Hooks became PublishGuard, a
 
 Tools move fast. Some workshop steps did not match the latest SDK and CLI. Using `context_manager="auto"` together with a file-based session manager now raises an error, `agentcore create` has no "skip" choice anymore (the `empty` template does that job), agents are added with `agentcore add runtime`, and `agentcore invoke` takes `--runtime` and a JSON `--payload` instead of a plain prompt. Reading `--help` was faster than guessing.
 
-A checklist is a better judge than another model for facts. For "is the hotline number on the page" a string check is exact, cheap and explainable. I kept LLM judgement for the parts that need it: choosing and phrasing.
+A checklist is a better judge than another model for facts. For "is the hotline number on the page" a string check is exact, cheap and explainable. A model is needed for "did the agent add something of its own", but on its own it over-flags: my first Verifier flagged shelter lists that were copied straight from the data. Pairing it with a dumb word-overlap check fixed most of that. The model finds candidates, the code decides.
 
 ## Limits
 
-Example City and its alerts are simulated. The facts checklist is written by hand for each hazard and level, which a real city would have to maintain. Load times were measured locally with network emulation, not on a real disaster network. Brownout replaces the homepage with a single page per level; a real site has many pages that would need the same treatment.
+Example City and its alerts are simulated. The facts checklist is written by hand for each hazard and level, which a real city would have to maintain. The evaluation judge for unsupported sentences is the same model and prompt as the Verifier, so that column shows what happens without the check, not an independent audit; everything else in the table is checked by plain code. Load times were measured locally with network emulation, not on a real disaster network. Brownout replaces the homepage with a single page per level; a real site has many pages that would need the same treatment.
 
 ## Try it
 
