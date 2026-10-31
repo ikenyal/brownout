@@ -23,3 +23,4 @@ infra/runtime-policy.json
 deploy/brownoutrt/agentcore/.cli/
 loadtest.log
 switch.log
+record-live.log
