@@ -1,0 +1,11 @@
+[project]
+name = "brownout-runtime"
+version = "0.1.0"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "aws-opentelemetry-distro>=0.22.0",
+    "bedrock-agentcore>=1.25.2",
+    "boto3>=1.43.123",
+    "botocore[crt]>=1.43.123",
+    "strands-agents>=1.63.0",
+]
