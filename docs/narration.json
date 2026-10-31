@@ -3,8 +3,8 @@
   "On a congested 3G connection, it is still loading after three minutes. The shelter list sits at the very bottom, under the video.",
   "This is Brownout, an agent built with the Strands Agents SDK. As the alert level rises, it makes the website lighter, instead of letting it go down.",
   "An alert event goes through Amazon EventBridge to the Brownout agent on Amazon Bedrock AgentCore Runtime. A Curator agent decides which facts matter for this hazard. A Writer agent writes one small page, using only the city's official data.",
-  "Before anything is published, a Strands hook checks the page. It must fit the byte budget, keep every required fact, and never list a shelter that is unsafe for this hazard. If it fails, the agent gets exact feedback and tries again.",
+  "Before anything is published, a Strands hook checks the page. Plain code checks the byte budget, every required fact, and that no unsafe shelter or made-up phone number appears. Then a Verifier agent looks for any sentence the city data does not support. If anything fails, the writer gets exact feedback and tries again.",
   "Only a checked page goes to Amazon S3. Then a single write to CloudFront KeyValueStore switches the whole site at the edge. No deployment, and no cache invalidation. Here, the live site switches from the full homepage, to Level 4, to Level 5, and back.",
-  "Simply stripping images is light, but wrong. It still says there is no alert, and lists the riverside hall during a flood. Without the guard, the agent got only seventy-two percent of its runs right. With the guard, every run was correct, and every page was under one kilobyte. It loads in one second, even on 2G.",
+  "Simply stripping images is light, but wrong. It still says there is no alert, and lists the riverside hall during a flood. Without the guard, the agent got five of eighteen runs wrong, sometimes adding safety advice the city never wrote. With the guard, all eighteen were correct, and every page was under one kilobyte. It loads in one second, even on 2G.",
   "When the danger passes, the full site comes back. Brownout. Lighter when it matters most."
 ]

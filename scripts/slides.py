@@ -40,7 +40,7 @@ SLIDES = {
           '<div class="box">Lambda<br><small>thin adapter</small></div><span class="arrow">→</span>'
           '<div class="box hl">AgentCore Runtime<br><small>Writer agent</small></div><span class="arrow">⇄</span>'
           '<div class="box">Curator agent<br><small>what must stay</small></div></div>'
-          '<div class="flow" style="margin-top:40px"><div class="box hl">PublishGuard hook<br><small>budget + required facts</small></div>'
+          '<div class="flow" style="margin-top:40px"><div class="box hl">PublishGuard hook<br><small>code checks + Verifier agent</small></div>'
           '<span class="arrow">→</span><div class="box">S3<br><small>checked page only</small></div><span class="arrow">→</span>'
           '<div class="box">CloudFront KeyValueStore<br><small>level = 4</small></div><span class="arrow">→</span>'
           '<div class="box">CloudFront Function<br><small>routes every URL</small></div></div>'
@@ -49,19 +49,22 @@ SLIDES = {
           'class PublishGuard(HookProvider):\n'
           '    def guard(self, event: BeforeToolCallEvent):\n'
           '        if event.tool_use["name"] != "publish_page": return\n'
-          '        result = check(html, hazard, level)   # size, required facts, unsafe shelters\n'
+          '        result = check(html, hazard, level)   # size, required facts, unsafe shelters, invented numbers\n'
+          '        if result.passed:\n'
+          '            result.unsupported = unsupported_sentences(verifier, html)   # Verifier agent\n'
           '        if not result.passed:\n'
           '            event.cancel_tool = f"Refused, page not published. {describe(result)}"</pre>'
           '<p style="margin-top:30px"><span class="bad">Refused:</span> Remove shelter:S3 (\'Riverside Community Hall\'):'
-          ' it is NOT safe for this hazard.</p></div>',
+          ' it is NOT safe for this hazard.</p><p><span class="bad">Refused:</span> Not supported by the city data:'
+          ' "Drop, take cover under a sturdy piece of furniture, and hold on."</p></div>',
     "s6": side("Live on AWS · sped up", "One key write switches the site",
                "<p>Full site → Level 4 → Level 5 → full site.</p><p>No deployment. No cache invalidation.</p>"
                "<p><small>Measured: 24 to 55 s from event to the live page. Agent: about 5.5 s.</small></p>"),
     "s7": '<div class="full"><h2>Light is not enough. It has to be right.</h2><table>'
-          '<tr><th>6 scenarios × levels 3-5</th><th>Pass</th><th>Facts kept</th><th>Unsafe shelter shown</th></tr>'
-          '<tr><td>Strip media</td><td class="bad">0%</td><td>75%</td><td class="bad">3 of 6</td></tr>'
-          '<tr><td>Agent, no guard</td><td>72%</td><td>97%</td><td class="bad">2 of 16</td></tr>'
-          '<tr><td>Brownout</td><td class="ok">100%</td><td class="ok">100%</td><td class="ok">0 of 18</td></tr></table>'
+          '<tr><th>6 scenarios, 3 runs each</th><th>Pass</th><th>Facts kept</th><th>Unsafe shelter</th><th>Unsupported</th></tr>'
+          '<tr><td>Strip media</td><td class="bad">0 of 6</td><td>75%</td><td class="bad">3 of 6</td><td class="bad">6 of 6</td></tr>'
+          '<tr><td>Agent, no guard</td><td>13 of 18</td><td>96%</td><td>0 of 18</td><td class="bad">5 of 18</td></tr>'
+          '<tr><td>Brownout</td><td class="ok">18 of 18</td><td class="ok">100%</td><td class="ok">0 of 18</td><td class="ok">0 of 18</td></tr></table>'
           '<p style="margin-top:36px">Every Brownout page: under 1 KB. Fully loaded in 0.5 s on congested 3G, 1.0 s on 2G.'
           ' The full site: not loaded after 180 s.</p></div>',
     "s8": '<div class="full"><h1 style="font-size:130px">Brownout</h1><p style="font-size:46px">Lighter when it matters most.</p>'
