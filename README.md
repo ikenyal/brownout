@@ -8,6 +8,14 @@ The name comes from operations: a *brownout* keeps a system alive by turning fea
 
 > Example City is fictional. Every name, address and phone number in this repository is made up.
 
+## Live demo
+
+- Example City (follows the current alert level): https://d3u5pnxb6mo4pr.cloudfront.net/
+  Between alerts this is the full site, about 28 MB.
+- Brownout pages written for a flood: [Level 3](https://d3u5pnxb6mo4pr.cloudfront.net/level-3/index.html), [Level 4](https://d3u5pnxb6mo4pr.cloudfront.net/level-4/index.html), [Level 5](https://d3u5pnxb6mo4pr.cloudfront.net/level-5/index.html)
+
+Alerts are simulated; only the project owner can send them.
+
 ## The problem
 
 City websites are built for good days: video backgrounds, photo carousels, maps, web fonts. During a flood or an earthquake, the same site is what people need most, at the moment when mobile networks are congested and phones are on low battery. The people hit hardest are those with the weakest connections: older residents, people on prepaid low-data plans, and anyone in a damaged area.

@@ -89,5 +89,10 @@ Example City and its alerts are simulated. The facts checklist is written by han
 
 ## Try it
 
+- Example City, live: https://d3u5pnxb6mo4pr.cloudfront.net/
+  This address follows the current alert level. Between alerts it shows the full everyday site, which is about 28 MB, so Wi-Fi is a good idea.
+- The Level 5 page Brownout wrote for a flood: https://d3u5pnxb6mo4pr.cloudfront.net/level-5/index.html (under 1 KB). Levels 3 and 4 are at /level-3/ and /level-4/.
+- Watching the same address switch from the full site to Level 4, Level 5 and back is in the demo video.
+
 Code (Apache 2.0): REPO_URL
 Demo video: VIDEO_URL
