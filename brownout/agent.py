@@ -40,7 +40,7 @@ Steps: 1) call read_town_facts, 2) call curate for a brief, 3) write ONE self-co
 Page rules:
 - Include <meta name="viewport" content="width=device-width, initial-scale=1">.
 - English, short plain sentences, the most urgent action first, a big heading with the alert level text (e.g. 'Level 4 - Evacuate').
-- Phone numbers as tel: links. Only facts from read_town_facts.
+- Phone numbers as tel: links whose visible text is just the number (e.g. <a href="tel:000-0000-0001">000-0000-0001</a>). Only facts from read_town_facts.
 - No images, no JavaScript, no web fonts, no external files. A few lines of inline CSS at most.
 - Stay far below the byte budget you are given; Level 5 must fit in the first network round trip."""
 
