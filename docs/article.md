@@ -71,7 +71,7 @@ Speed, measured in Chrome with network emulation and the cache disabled:
 | Congested 3G (400 kbit/s, 400 ms) | not fully loaded after 180 s | 0.5 s |
 | 2G (50 kbit/s, 500 ms) | not fully loaded after 180 s | 1.0 s |
 
-Brownout pages were between about 750 and 900 bytes gzipped, around 30,000 times smaller than the full homepage.
+Brownout pages were between about 740 and 920 bytes gzipped, around 30,000 times smaller than the full homepage.
 
 On AWS, from the moment the event arrives, the agent needs about 6 seconds to write and verify a page, and the whole path through EventBridge, Lambda and AgentCore Runtime took about 15 seconds in my measurements.
 
