@@ -2,7 +2,7 @@
 
 When a flood warning goes out, everyone opens the same city website at the same time, on the same congested mobile network. That website was built for good days: a video background, a photo carousel, a big map and a web font. The information people need, where to go and who to call, sits at the bottom of the page, behind tens of megabytes.
 
-Brownout is an agent built with the Strands Agents SDK that fixes this. As the alert level rises, it rewrites the site into a smaller and smaller emergency page, checks every page against the city's own facts before it goes live, and switches the live site at the CloudFront edge in seconds.
+Brownout is an agent built with the Strands Agents SDK that fixes this. As the alert level rises, it rewrites the site into a smaller and smaller emergency page, checks every page against the city's own facts before it goes live, and switches the live site at the CloudFront edge within a minute.
 
 The name comes from operations. A brownout keeps a system running by switching features off, instead of letting the whole thing fail.
 

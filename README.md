@@ -2,7 +2,7 @@
 
 **When disaster strikes, a city website should get lighter, not go down.**
 
-Brownout is an AI agent built with the [Strands Agents SDK](https://strandsagents.com/) that rewrites a heavy city website into a tiny emergency page as the alert level rises, and switches the live site at the edge in seconds.
+Brownout is an AI agent built with the [Strands Agents SDK](https://strandsagents.com/) that rewrites a heavy city website into a tiny emergency page as the alert level rises, and switches the live site at the edge within a minute.
 
 The name comes from operations: a *brownout* keeps a system alive by turning features off instead of failing completely.
 
