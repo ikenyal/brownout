@@ -10,6 +10,8 @@ The name comes from operations: a *brownout* keeps a system alive by turning fea
 
 ## Live demo
 
+- Demo video (2 min): https://youtu.be/vdDsHZdrnAI
+
 - Example City (follows the current alert level): https://d3u5pnxb6mo4pr.cloudfront.net/
   Between alerts this is the full site, about 28 MB.
 - Brownout pages written for a flood: [Level 3](https://d3u5pnxb6mo4pr.cloudfront.net/level-3/index.html), [Level 4](https://d3u5pnxb6mo4pr.cloudfront.net/level-4/index.html), [Level 5](https://d3u5pnxb6mo4pr.cloudfront.net/level-5/index.html)
