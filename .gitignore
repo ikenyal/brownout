@@ -21,3 +21,4 @@ deploy/brownoutrt/agentcore/aws-targets.json
 deploy/brownoutrt/agentcore/agentcore.json
 infra/runtime-policy.json
 deploy/brownoutrt/agentcore/.cli/
+loadtest.log

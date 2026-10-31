@@ -1,0 +1,50 @@
+[
+  {
+    "network": "3G (congested)",
+    "page": "full site",
+    "first_content_s": 1.6,
+    "fully_loaded_s": null
+  },
+  {
+    "network": "3G (congested)",
+    "page": "Level 3 (flood)",
+    "first_content_s": 0.5,
+    "fully_loaded_s": 0.5
+  },
+  {
+    "network": "3G (congested)",
+    "page": "Level 4 (flood)",
+    "first_content_s": 0.5,
+    "fully_loaded_s": 0.5
+  },
+  {
+    "network": "3G (congested)",
+    "page": "Level 5 (flood)",
+    "first_content_s": 0.5,
+    "fully_loaded_s": 0.5
+  },
+  {
+    "network": "2G",
+    "page": "full site",
+    "first_content_s": 4.8,
+    "fully_loaded_s": null
+  },
+  {
+    "network": "2G",
+    "page": "Level 3 (flood)",
+    "first_content_s": 1.0,
+    "fully_loaded_s": 1.0
+  },
+  {
+    "network": "2G",
+    "page": "Level 4 (flood)",
+    "first_content_s": 1.0,
+    "fully_loaded_s": 1.0
+  },
+  {
+    "network": "2G",
+    "page": "Level 5 (flood)",
+    "first_content_s": 1.0,
+    "fully_loaded_s": 1.0
+  }
+]
