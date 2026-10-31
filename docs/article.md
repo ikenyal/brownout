@@ -2,7 +2,7 @@
 
 When a flood warning goes out, everyone opens the same city website at the same time, on the same congested mobile network. That website was built for good days: a video background, a photo carousel, a big map and a web font. The information people need, where to go and who to call, sits at the bottom of the page, behind tens of megabytes.
 
-Brownout is an agent built with the Strands Agents SDK that fixes this. As the alert level rises, it rewrites the site into a smaller and smaller emergency page, checks every page against the city's own facts before it goes live, and switches the live site at the CloudFront edge within a minute.
+Brownout is an agent built with the [Strands Agents SDK](https://strandsagents.com/) that fixes this. As the alert level rises, it rewrites the site into a smaller and smaller emergency page, checks every page against the city's own facts before it goes live, and switches the live site at the CloudFront edge within a minute.
 
 The name comes from operations. A brownout keeps a system running by switching features off, instead of letting the whole thing fail.
 
@@ -89,10 +89,7 @@ Example City and its alerts are simulated. The facts checklist is written by han
 
 ## Try it
 
-- Example City, live: https://d3u5pnxb6mo4pr.cloudfront.net/
-  This address follows the current alert level. Between alerts it shows the full everyday site, which is about 28 MB, so Wi-Fi is a good idea.
-- The Level 5 page Brownout wrote for a flood: https://d3u5pnxb6mo4pr.cloudfront.net/level-5/index.html (under 1 KB). Levels 3 and 4 are at /level-3/ and /level-4/.
-- Watching the same address switch from the full site to Level 4, Level 5 and back is in the demo video.
-
-Code (Apache 2.0): https://github.com/ikenyal/brownout
-Demo video: https://youtu.be/vdDsHZdrnAI
+- [Example City, live](https://d3u5pnxb6mo4pr.cloudfront.net/): this address follows the current alert level. Between alerts it shows the full everyday site, which is about 28 MB, so Wi-Fi is a good idea.
+- The pages Brownout wrote for a flood, each under 1 KB: [Level 3](https://d3u5pnxb6mo4pr.cloudfront.net/level-3/index.html), [Level 4](https://d3u5pnxb6mo4pr.cloudfront.net/level-4/index.html), [Level 5](https://d3u5pnxb6mo4pr.cloudfront.net/level-5/index.html)
+- [Demo video](https://youtu.be/vdDsHZdrnAI) (2 minutes), including the same address switching from the full site to Level 4, Level 5 and back
+- [Code on GitHub](https://github.com/ikenyal/brownout) (Apache 2.0)
