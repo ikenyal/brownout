@@ -126,6 +126,14 @@ uv run python infra/deploy_trigger.py <runtime-arn> # EventBridge -> Lambda -> R
 PYTHONPATH=. uv run python scripts/alert.py flood 4 # raise the alert and time the switch
 ```
 
+### When the agent gives up
+
+If the agent cannot get a page past PublishGuard within six attempts, the runtime does not leave the full site up during an alert. It publishes a plain page that `brownout/fallback.py` builds from the city data with ordinary code: exactly the items `content/must_have.json` requires, nothing else. It goes through the same deterministic checks before it is published, and the run reports `"mode": "fallback-level-N"`.
+
+```bash
+uv run python tests/test_fallback.py   # every hazard and level passes the checks; no AWS needed
+```
+
 ### Out-of-order alerts
 
 Alerts can finish out of order: a level 4 run can still be working when a level 5 alert arrives, and Lambda retries a failed asynchronous invocation up to two times. To keep an older alert from rolling the site back, the trigger passes EventBridge's event time as `issued_at`, and `set_level` writes `level` and `issued_at` together in one conditional `UpdateKeys` call, only if no newer alert is already live. A run whose alert is already stale skips the agent entirely.

@@ -38,7 +38,7 @@ fi
 rm -rf "$APP/brownout" "$APP/content"
 mkdir -p "$APP/brownout"
 cp "$ROOT/runtime/main.py" "$APP/main.py"
-cp "$ROOT"/brownout/{__init__,agent,facts,edge}.py "$APP/brownout/"
+cp "$ROOT"/brownout/{__init__,agent,facts,edge,fallback}.py "$APP/brownout/"
 cp -r "$ROOT/content" "$APP/content"
 
 cd "$APP"

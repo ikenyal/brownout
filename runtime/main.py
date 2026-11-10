@@ -4,6 +4,8 @@ Payload: {"hazard": "flood" | "earthquake", "level": 1-5, "issued_at": ISO 8601 
   level 1-2 -> switch the site back to the full version (no agent needed)
   level 3-5 -> the agent rewrites the site; only a page that passed the guard
                is published, and only then does the edge switch to it.
+If the agent cannot get a page past the guard, a plain page built by code from the same
+data (brownout/fallback.py) is published instead, so an alert never leaves the full site up.
 An alert older than the one already live is ignored (see edge.set_level), so runs that
 finish out of order, or Lambda's automatic retries, cannot roll the site back.
 """
@@ -16,7 +18,8 @@ from bedrock_agentcore.runtime import BedrockAgentCoreApp
 
 from brownout.agent import brownout
 from brownout.edge import get_level, is_stale, s3_publisher, set_level
-from brownout.facts import HAZARDS
+from brownout.facts import HAZARDS, check
+from brownout.fallback import fallback_page
 
 app = BedrockAgentCoreApp()
 
@@ -37,15 +40,22 @@ def invoke(payload, context):
             return {"ok": False, "stale": True, "level": level, "previous": previous}
         return {"ok": True, "mode": "full", "level": level, "previous": previous,
                 "seconds": round(time.time() - start, 1)}
-    log = brownout(hazard, level, s3_publisher())
+    publish = s3_publisher()
+    log = brownout(hazard, level, publish)
+    mode = f"level-{level}"
     if log.published is None:
-        # Keep whatever is live now; never switch to an unchecked page.
-        return {"ok": False, "level": level, "previous": previous, "attempts": log.attempts,
-                "feedback": log.feedback, "seconds": round(time.time() - start, 1)}
+        # The agent gave up. Publish the plain page built from the data, after the same
+        # deterministic checks; never switch to a page that was not checked.
+        html = fallback_page(hazard, level)
+        if not check(html, hazard, level).passed:
+            return {"ok": False, "level": level, "previous": previous, "attempts": log.attempts,
+                    "feedback": log.feedback, "seconds": round(time.time() - start, 1)}
+        publish(level, html)
+        mode = f"fallback-level-{level}"
     if not set_level(level, issued_at):  # a newer alert won while the agent was working
         return {"ok": False, "stale": True, "level": level, "previous": previous,
                 "seconds": round(time.time() - start, 1)}
-    return {"ok": True, "mode": f"level-{level}", "level": level, "previous": previous,
+    return {"ok": True, "mode": mode, "level": level, "previous": previous,
             "attempts": log.attempts, "feedback": log.feedback, "seconds": round(time.time() - start, 1)}
 
 
