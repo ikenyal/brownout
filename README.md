@@ -126,6 +126,16 @@ uv run python infra/deploy_trigger.py <runtime-arn> # EventBridge -> Lambda -> R
 PYTHONPATH=. uv run python scripts/alert.py flood 4 # raise the alert and time the switch
 ```
 
+### Out-of-order alerts
+
+Alerts can finish out of order: a level 4 run can still be working when a level 5 alert arrives, and Lambda retries a failed asynchronous invocation up to two times. To keep an older alert from rolling the site back, the trigger passes EventBridge's event time as `issued_at`, and `set_level` writes `level` and `issued_at` together in one conditional `UpdateKeys` call, only if no newer alert is already live. A run whose alert is already stale skips the agent entirely.
+
+```bash
+uv run python tests/test_edge_ordering.py                                   # no AWS needed
+PYTHONPATH=. uv run python scripts/alert.py flood 5
+PYTHONPATH=. uv run python scripts/alert.py flood 4 --issued-ago 120 --timeout 90   # expect: no change
+```
+
 ### Clean up
 
 ```bash

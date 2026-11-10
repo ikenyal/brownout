@@ -36,12 +36,45 @@ def s3_publisher() -> Callable[[int, str], str]:
     return publish
 
 
-def set_level(level: int) -> None:
-    """The only thing that switches the live site. Takes effect at the edge within seconds."""
+def set_level(level: int, issued_at: str | None = None) -> bool:
+    """The only thing that switches the live site. Takes effect at the edge within seconds.
+
+    issued_at is the alert's own timestamp (EventBridge "time", ISO 8601 UTC). Runs can finish
+    out of order: a slow or retried run for an older alert must not overwrite a newer level.
+    So the write is a compare-and-set: read the store's ETag, read the timestamp of the level
+    that is live now, and write level and timestamp together only if ours is not older.
+    If anything wrote in between, the ETag no longer matches, the write is rejected, and we
+    read again. Returns False if the alert is stale and nothing was written.
+    """
     kvs = boto3.client("cloudfront-keyvaluestore", region_name=REGION)
     arn = config()["kvs_arn"]
-    etag = kvs.describe_key_value_store(KvsARN=arn)["ETag"]
-    kvs.put_key(KvsARN=arn, Key="level", Value=str(level), IfMatch=etag)
+    for _ in range(5):
+        etag = kvs.describe_key_value_store(KvsARN=arn)["ETag"]
+        if issued_at is not None and (current := live_issued_at(kvs, arn)) and current > issued_at:
+            return False
+        puts = [{"Key": "level", "Value": str(level)}]
+        if issued_at is not None:
+            puts.append({"Key": "issued_at", "Value": issued_at})
+        try:
+            kvs.update_keys(KvsARN=arn, IfMatch=etag, Puts=puts)
+            return True
+        except kvs.exceptions.ConflictException:
+            continue  # someone else wrote first; read again
+    raise RuntimeError("KeyValueStore kept changing under us; giving up after 5 attempts")
+
+
+def live_issued_at(kvs=None, arn: str | None = None) -> str | None:
+    kvs = kvs or boto3.client("cloudfront-keyvaluestore", region_name=REGION)
+    try:
+        return kvs.get_key(KvsARN=arn or config()["kvs_arn"], Key="issued_at")["Value"]
+    except kvs.exceptions.ResourceNotFoundException:
+        return None
+
+
+def is_stale(issued_at: str | None) -> bool:
+    """True if a newer alert than this one has already switched the site."""
+    current = live_issued_at() if issued_at else None
+    return bool(current and current > issued_at)
 
 
 def get_level() -> int:

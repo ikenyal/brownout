@@ -25,7 +25,9 @@ import json, os, uuid, boto3
 client = boto3.client("bedrock-agentcore")
 def handler(event, context):
     d = event["detail"]
-    payload = {"hazard": d["hazard"], "level": int(d["level"])}
+    # event["time"] is set by EventBridge when the alert is accepted, so it orders alerts
+    # even when their runs finish out of order or Lambda retries one.
+    payload = {"hazard": d["hazard"], "level": int(d["level"]), "issued_at": event["time"]}
     res = client.invoke_agent_runtime(
         agentRuntimeArn=os.environ["RUNTIME_ARN"],
         runtimeSessionId=f"alert-{uuid.uuid4()}",
