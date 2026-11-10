@@ -16,9 +16,9 @@ from pathlib import Path
 
 import boto3
 
+from naming import EVENT_SOURCE, OUTPUTS, TRIGGER as NAME
+
 REGION = "us-east-1"
-OUTPUTS = Path(__file__).resolve().parent / "outputs.json"
-NAME = "brownout-trigger"
 
 HANDLER = '''
 import json, os, uuid, boto3
@@ -69,7 +69,7 @@ def main(runtime_arn: str) -> None:
     fn_arn = fn["FunctionArn"]
 
     rule_arn = ev.put_rule(Name=NAME, EventPattern=json.dumps({
-        "source": ["examplecity.alerts"], "detail-type": ["AlertLevelChanged"]}))["RuleArn"]
+        "source": [EVENT_SOURCE], "detail-type": ["AlertLevelChanged"]}))["RuleArn"]
     ev.put_targets(Rule=NAME, Targets=[{"Id": "lambda", "Arn": fn_arn}])
     try:
         lam.add_permission(FunctionName=NAME, StatementId="eventbridge", Action="lambda:InvokeFunction",

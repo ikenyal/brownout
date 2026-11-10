@@ -2,6 +2,7 @@
 
 Idempotent: safe to run again. Saves IDs to infra/outputs.json.
 Run:  AWS_PROFILE=... uv run python infra/deploy_infra.py
+      BROWNOUT_NAME=brownouttest ... for a second, independent copy
 """
 
 from __future__ import annotations
@@ -12,10 +13,9 @@ from pathlib import Path
 
 import boto3
 
-HERE = Path(__file__).resolve().parent
-OUTPUTS = HERE / "outputs.json"
+from naming import HERE, NAME, OUTPUTS, RUNTIME_POLICY
+
 REGION = "us-east-1"
-NAME = "brownout"
 
 sts = boto3.client("sts", region_name=REGION)
 s3 = boto3.client("s3", region_name=REGION)
@@ -116,7 +116,7 @@ def runtime_policy(out: dict) -> None:
          "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
          "Resource": ["arn:aws:bedrock:*::foundation-model/amazon.nova-*",
                       "arn:aws:bedrock:*:*:inference-profile/us.amazon.nova-*"]}]}
-    (HERE / "runtime-policy.json").write_text(json.dumps(policy, indent=2))
+    RUNTIME_POLICY.write_text(json.dumps(policy, indent=2))
 
 
 if __name__ == "__main__":

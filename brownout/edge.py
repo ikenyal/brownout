@@ -11,7 +11,10 @@ from typing import Callable
 import boto3
 
 REGION = "us-east-1"
-OUTPUTS = Path(__file__).resolve().parents[1] / "infra" / "outputs.json"
+NAME = os.environ.get("BROWNOUT_NAME", "brownout")
+OUTPUTS = Path(__file__).resolve().parents[1] / "infra" / (
+    "outputs.json" if NAME == "brownout" else f"outputs-{NAME}.json")
+EVENT_SOURCE = "examplecity.alerts" if NAME == "brownout" else f"examplecity.alerts.{NAME}"
 
 
 def config() -> dict:

@@ -13,7 +13,7 @@ import urllib.request
 
 import boto3
 
-from brownout.edge import config
+from brownout.edge import EVENT_SOURCE, config
 
 
 def live_heading(url: str) -> str:
@@ -27,7 +27,7 @@ def main(hazard: str, level: int) -> None:
     events = boto3.client("events", region_name="us-east-1")
     before = live_heading(url)
     t0 = time.time()
-    events.put_events(Entries=[{"Source": "examplecity.alerts", "DetailType": "AlertLevelChanged",
+    events.put_events(Entries=[{"Source": EVENT_SOURCE, "DetailType": "AlertLevelChanged",
                                 "Detail": json.dumps({"hazard": hazard, "level": level})}])
     print(f"event sent: {hazard} level {level} (live now: {before})")
     while time.time() - t0 < 180:

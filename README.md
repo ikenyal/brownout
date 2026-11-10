@@ -126,7 +126,27 @@ uv run python infra/deploy_trigger.py <runtime-arn> # EventBridge -> Lambda -> R
 PYTHONPATH=. uv run python scripts/alert.py flood 4 # raise the alert and time the switch
 ```
 
-The AgentCore project in `deploy/brownoutrt` was created with `agentcore create --template empty` and `agentcore add runtime --name Brownout --language python`, passing the bucket and KeyValueStore ARN as environment variables and `infra/runtime-policy.json` as an additional policy.
+### Clean up
+
+```bash
+scripts/teardown.sh   # asks you to type the name, then removes the trigger, the AgentCore Runtime and the edge
+```
+
+Disabling the CloudFront distribution takes several minutes, and the script waits for it. The CDK bootstrap stack (`CDKToolkit`) is left in place because other CDK apps in the account may use it.
+
+### A second copy
+
+Every script reads `BROWNOUT_NAME` (default `brownout`, 3-20 lowercase letters or digits). With another name you get an independent set of resources, its own `infra/outputs-<name>.json`, its own AgentCore project in `deploy/<name>rt`, and its own event source (`examplecity.alerts.<name>`), so alerts for one copy never reach the other:
+
+```bash
+export BROWNOUT_NAME=brownouttest
+uv run python infra/deploy_infra.py
+scripts/deploy_runtime.sh
+# ...
+scripts/teardown.sh
+```
+
+`scripts/deploy_runtime.sh` creates the AgentCore project config on first run with `agentcore create --template empty` and `agentcore add runtime --name Brownout --language python`, passing the bucket and KeyValueStore ARN as environment variables and `infra/runtime-policy.json` as an additional policy. The generated `agentcore.json` holds account-specific values, so it is not committed.
 
 ## Credits and license
 
