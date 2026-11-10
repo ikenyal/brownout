@@ -2,7 +2,7 @@
 
 **When disaster strikes, a city website should get lighter, not go down.**
 
-Brownout is an AI agent built with the [Strands Agents SDK](https://strandsagents.com/) that rewrites a heavy city website into a tiny emergency page as the alert level rises, and switches the live site at the edge within a minute.
+Brownout is an AI agent built with the [Strands Agents SDK](https://strandsagents.com/) that rewrites a heavy city website into a tiny emergency page as the alert level rises, and switches the live site at the edge within a minute or two.
 
 The name comes from operations: a *brownout* keeps a system alive by turning features off instead of failing completely.
 
@@ -85,7 +85,7 @@ Raw results: `results/loadtest.json`.
 
 ### How fast does the live site switch? (`scripts/alert.py`)
 
-From sending the event to the live CloudFront URL showing the new page: 27 to 47 seconds over four runs. The agent itself (including the Verifier) takes about 7 to 8 s; Lambda including a new AgentCore Runtime session about 12 to 13 s; the rest is KeyValueStore propagation to the edge. Raw results: `results/switch-times.json`.
+From sending the event to the KeyValueStore write (EventBridge, Lambda, a new AgentCore Runtime session, the agent, PublishGuard): about 9 to 13 seconds; for a level 4 page the agent itself takes 6 to 7 of them. After the write, requests can get either the old or the new page for a while. Over four switches on Nov 10, 2026, measured from one client in the Tokyo area, the new page was first seen 37 to 56 s after the event, and seen on five reads in a row (2 s apart) 63 to 79 s after it. Plan for "a minute or two", not "seconds". Earlier measurements that stopped at the first sighting gave 27 to 47 s (`results/switch-times.json`).
 
 ## Limits
 
