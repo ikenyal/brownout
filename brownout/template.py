@@ -1,10 +1,9 @@
-"""A page built by plain code from the city data: the floor under the agent.
+"""The emergency page built by plain code from the city data. It goes live first.
 
-If the agent cannot produce a page that passes PublishGuard (it gives up after six
-refusals), the runtime publishes this instead of leaving the full site up during an
-alert. It contains exactly the items content/must_have.json requires for the hazard and
-level, copied from content/town.json, so it passes the same checks by construction.
-It is plainer than the agent's page, and that is the point: it cannot be wrong in new ways.
+For each hazard and level it contains exactly the items content/must_have.json requires,
+copied from content/town.json, and nothing else, so it passes the same checks as the
+agent's page by construction. The runtime publishes it and switches the site before the
+agent starts; the agent can only replace it with another page that passes the checks.
 """
 
 from __future__ import annotations
@@ -18,7 +17,7 @@ def _by_id(items: list[dict], ids: list[str]) -> list[dict]:
     return [x for x in items if x["id"] in ids]
 
 
-def fallback_page(hazard: str, level: int) -> str:
+def template_page(hazard: str, level: int) -> str:
     required = MUST[hazard][str(level)]["required"]
     ids = {kind: [i.split(":")[1] for i in required if i.startswith(kind + ":")]
            for kind in ("hotline", "shelter", "water")}
@@ -39,7 +38,8 @@ def fallback_page(hazard: str, level: int) -> str:
     shelters = _by_id(TOWN["shelters"], ids["shelter"])
     if shelters:
         parts.append("<h2>Safe Shelters</h2><ul>")
-        parts += [f"<li><strong>{escape(s['name'])}</strong>, {escape(s['address'])}</li>" for s in shelters]
+        parts += [f"<li><strong>{escape(s['name'])}</strong>, {escape(s['address'])}"
+                  + (f"<br>{escape(s['notes'])}" if s.get("notes") else "") + "</li>" for s in shelters]
         parts.append("</ul>")
     water = _by_id(TOWN["water_points"], ids["water"])
     if water:

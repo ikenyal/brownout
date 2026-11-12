@@ -21,7 +21,7 @@ APP="$PROJECT/app/$RUNTIME"
 
 if [ ! -f "$PROJECT/agentcore/agentcore.json" ]; then
   # agentcore.json holds account-specific values, so it is not in git. Generate it.
-  ENV_VARS="$(python3 -c 'import json,sys; o=json.load(open(sys.argv[1])); print(json.dumps({"BROWNOUT_BUCKET": o["bucket"], "BROWNOUT_KVS_ARN": o["kvs_arn"]}))' "$OUT")"
+  ENV_VARS="$(python3 -c 'import json,sys; o=json.load(open(sys.argv[1])); print(json.dumps({"BROWNOUT_BUCKET": o["bucket"], "BROWNOUT_KVS_ARN": o["kvs_arn"], "BROWNOUT_AGENT": sys.argv[2]}))' "$OUT" "${BROWNOUT_AGENT:-on}")"
   TMP="$(mktemp -d)"
   (cd "$TMP" && $CLI create --name "${NAME}rt" --template empty --skip-git --skip-install \
      && cd "${NAME}rt" && $CLI add runtime --name "$RUNTIME" --language python \
@@ -38,7 +38,7 @@ fi
 rm -rf "$APP/brownout" "$APP/content"
 mkdir -p "$APP/brownout"
 cp "$ROOT/runtime/main.py" "$APP/main.py"
-cp "$ROOT"/brownout/{__init__,agent,facts,edge,fallback}.py "$APP/brownout/"
+cp "$ROOT"/brownout/{__init__,agent,facts,edge,template}.py "$APP/brownout/"
 cp -r "$ROOT/content" "$APP/content"
 
 cd "$APP"

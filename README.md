@@ -38,21 +38,22 @@ Brownout follows Japan's five-level evacuation alert system. At each level it pu
 | 5 - emergency safety | survival | 14 KB (fits in the first network round trip) |
 
 1. An `AlertLevelChanged` event reaches Amazon EventBridge.
-2. A thin AWS Lambda adapter invokes the Brownout agent on **Amazon Bedrock AgentCore Runtime**.
-3. The **Curator** agent (a specialist called as a tool) decides which facts matter for this hazard and level, for example which shelters are safe in a flood.
-4. The **Writer** agent writes one self-contained HTML page from the official city data only, and calls `publish_page`.
+2. A thin AWS Lambda adapter invokes the Brownout runtime on **Amazon Bedrock AgentCore Runtime**.
+3. The runtime first publishes a **template page** built by plain code from the official city data: exactly the facts `content/must_have.json` requires for this hazard and level, checked by the same deterministic code as below, and switches the edge to it. No model call stands between the alert and the switch.
+4. Then the **Curator** agent (a specialist called as a tool) decides which facts matter most, and the **Writer** agent writes a better page from the city data only and calls `publish_page`.
 5. **PublishGuard**, a Strands hook, blocks `publish_page` unless the page passes two layers of checks. Deterministic code: the byte budget, every required fact present, no unsafe shelter, and no phone number, address or place name that is not in the city data. Then a **Verifier** agent lists any sentence the city data does not support (for example general safety tips the agent added on its own); a word-overlap check drops flags that are just paraphrases. Refusals go back to the agent as concrete feedback, up to six attempts.
-6. Only a page that passed is written to Amazon S3, and only then is the alert level written to **CloudFront KeyValueStore**.
+6. A page that passes replaces the template at the same address in Amazon S3. If the agent gives up, the template stays live. The alert level lives in **CloudFront KeyValueStore**, written with a conditional write so that an older alert can never overwrite a newer one.
 7. A **CloudFront Function** reads that value on every request and routes all URLs to the page for the current level. No deployment and no cache invalidation are needed to switch.
 
 ```mermaid
 flowchart LR
   EB[EventBridge<br/>AlertLevelChanged] --> L[Lambda adapter]
-  L --> RT[AgentCore Runtime<br/>Brownout agent]
+  L --> RT[AgentCore Runtime]
+  RT -->|1. template page, checked| S3
   RT --> C[Curator agent]
   RT -->|publish_page| G{PublishGuard hook<br/>code checks + Verifier agent}
   G -->|refused + feedback| RT
-  G -->|passed| S3[(S3)]
+  G -->|2. passed: replaces template| S3[(S3)]
   RT -->|level| KVS[(CloudFront<br/>KeyValueStore)]
   U[Phone] --> CF[CloudFront + Function] --> S3
   CF -.reads level.-> KVS
@@ -126,12 +127,17 @@ uv run python infra/deploy_trigger.py <runtime-arn> # EventBridge -> Lambda -> R
 PYTHONPATH=. uv run python scripts/alert.py flood 4 # raise the alert and time the switch
 ```
 
-### When the agent gives up
+### Template first, agent second
 
-If the agent cannot get a page past PublishGuard within six attempts, the runtime does not leave the full site up during an alert. It publishes a plain page that `brownout/fallback.py` builds from the city data with ordinary code: exactly the items `content/must_have.json` requires, nothing else. It goes through the same deterministic checks before it is published, and the run reports `"mode": "fallback-level-N"`.
+For levels 3 to 5 the runtime does two things, in this order:
+
+1. It publishes the template page that `brownout/template.py` builds from the city data with ordinary code (exactly the items `content/must_have.json` requires, nothing else), after the same deterministic checks, and switches the edge to it. No model call stands between the alert and the switch.
+2. Then the agent tries to write a better page. PublishGuard only lets it publish a page that passes the checks and the Verifier; if it does, that page replaces the template at the same address. If the agent gives up, the template simply stays live.
+
+The run reports `"mode": "template-level-N"` or `"agent-level-N"`, and `switched_after` (seconds until the edge was switched). Set `BROWNOUT_AGENT=off` before the first `scripts/deploy_runtime.sh` to run with the template only.
 
 ```bash
-uv run python tests/test_fallback.py   # every hazard and level passes the checks; no AWS needed
+uv run python tests/test_template.py   # every hazard and level passes the checks; no AWS needed
 ```
 
 ### Out-of-order alerts
